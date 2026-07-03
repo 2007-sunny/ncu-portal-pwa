@@ -244,6 +244,7 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
             cursor: pointer;
+            display: inline-block;
         }
 
         .quick-btn:hover {
@@ -336,11 +337,11 @@
         <div class="quick-actions">
             <a href="#" class="quick-btn" onclick="openAllServices(); return false;">🚀 一鍵開啟核心三站</a>
             <a href="#" class="quick-btn" onclick="showShortcuts(); return false;">⌨️ 快捷鍵</a>
+            <label for="bgInput" class="quick-btn">🖼️ 更換背景</label>
             <select id="themeSelect" class="theme-select" aria-label="切換主題">
                 <option value="dark">🖤 深黑</option>
                 <option value="light">🤍 明亮</option>
                 <option value="blue">💙 中大藍</option>
-                <option value="custom">🖼️ 自訂背景圖</option>
             </select>
         </div>
 
@@ -519,20 +520,34 @@
             document.body.style.background = '';
         }
 
+        // 動態新增「🖼️ 自訂背景」選項並設為選中狀態
+        function ensureCustomOption() {
+            let opt = themeSelect.querySelector('option[value="custom"]');
+            if (!opt) {
+                opt = document.createElement('option');
+                opt.value = 'custom';
+                opt.textContent = '🖼️ 自訂背景';
+                themeSelect.appendChild(opt);
+            }
+            opt.selected = true;
+        }
+
+        // 移除動態新增的「🖼️ 自訂背景」選項
+        function removeCustomOption() {
+            const opt = themeSelect.querySelector('option[value="custom"]');
+            if (opt) {
+                opt.remove();
+            }
+        }
+
         function setTheme(themeName) {
             document.body.setAttribute('data-theme', themeName);
             localStorage.setItem(THEME_STORAGE_KEY, themeName);
 
             if (themeName !== 'custom') {
                 clearCustomBackground();
-            } else {
-                const savedBg = localStorage.getItem(BG_STORAGE_KEY);
-                if (savedBg) {
-                    applyCustomBackground(savedBg);
-                } else {
-                    bgInput.value = '';
-                    bgInput.click();
-                }
+                localStorage.removeItem(BG_STORAGE_KEY);
+                removeCustomOption();
             }
 
             const metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -549,6 +564,8 @@
             setTheme(e.target.value);
         });
 
+        // 「🖼️ 更換背景」使用 <label for="bgInput"> 直接觸發，
+        // 100% 由使用者手勢啟動，可繞過 Safari 對間接 click() 的攔截。
         bgInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) {
@@ -559,10 +576,16 @@
             const reader = new FileReader();
             reader.onload = () => {
                 const base64String = reader.result;
+
+                // 先清掉舊圖片快取，避免私密模式下 localStorage 容量爆掉
                 localStorage.removeItem(BG_STORAGE_KEY);
                 localStorage.setItem(BG_STORAGE_KEY, base64String);
+
+                ensureCustomOption();
                 setTheme('custom');
                 applyCustomBackground(base64String);
+
+                // 清空 input 的值，確保連續選取同一張照片也能再次觸發 change
                 e.target.value = '';
             };
             reader.onerror = () => {
@@ -573,7 +596,22 @@
 
         function initTheme() {
             const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
-            setTheme(savedTheme);
+            const savedBg = localStorage.getItem(BG_STORAGE_KEY);
+
+            if (savedTheme === 'custom' && savedBg) {
+                ensureCustomOption();
+                document.body.setAttribute('data-theme', 'custom');
+                applyCustomBackground(savedBg);
+
+                const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+                if (metaThemeColor) {
+                    metaThemeColor.content = THEME_META_COLORS.custom;
+                }
+                themeSelect.value = 'custom';
+            } else {
+                // 若記錄為 custom 但沒有背景圖，退回深黑主題
+                setTheme(savedTheme === 'custom' ? 'dark' : savedTheme);
+            }
         }
 
         if (document.readyState === 'loading') {
