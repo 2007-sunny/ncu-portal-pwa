@@ -6,44 +6,76 @@
     <title>NCU Helper - 中央大學入口</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon.png" type="image/png">
-    <meta name="theme-color" content="#0066cc">
+    <meta name="theme-color" content="#0f172a">
     <meta name="description" content="中央大學學生專用入口網站">
     
     <style>
-        :root {
-            --bg-gradient-start: #667eea;
-            --bg-gradient-end: #764ba2;
-            --text-color: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.9);
-            --text-subtle: rgba(255, 255, 255, 0.8);
-            --text-footer: rgba(255, 255, 255, 0.7);
-            --card-bg: rgba(255, 255, 255, 0.1);
+        /* 🖤 預設深黑主題 (dark) */
+        body,
+        body[data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover-bg: rgba(30, 41, 59, 0.75);
+            --card-shadow: rgba(0, 0, 0, 0.4);
+            --text-color: #f8fafc;
+            --text-desc: #94a3b8;
+            --btn-bg: rgba(255, 255, 255, 0.1);
+            --btn-hover-bg: rgba(255, 255, 255, 0.18);
+            --prompt-bg: rgba(15, 23, 42, 0.5);
+            --header-shadow: rgba(0, 0, 0, 0.45);
+            --theme-color: #0f172a;
+        }
+
+        /* 🤍 清爽明亮主題 (light) */
+        body[data-theme="light"] {
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --card-border: rgba(0, 0, 0, 0.05);
+            --card-hover-bg: rgba(255, 255, 255, 0.72);
+            --card-shadow: rgba(0, 0, 0, 0.12);
+            --text-color: #0f172a;
+            --text-desc: #475569;
+            --btn-bg: rgba(0, 0, 0, 0.05);
+            --btn-hover-bg: rgba(0, 0, 0, 0.1);
+            --prompt-bg: rgba(255, 255, 255, 0.6);
+            --header-shadow: rgba(0, 0, 0, 0.15);
+            --theme-color: #f1f5f9;
+        }
+
+        /* 💙 松風中大藍主題 (blue) */
+        body[data-theme="blue"] {
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --card-bg: rgba(255, 255, 255, 0.12);
             --card-border: rgba(255, 255, 255, 0.2);
             --card-hover-bg: rgba(255, 255, 255, 0.2);
-            --card-shadow: rgba(0, 0, 0, 0.2);
+            --card-shadow: rgba(0, 0, 0, 0.25);
+            --text-color: #ffffff;
+            --text-desc: rgba(255, 255, 255, 0.75);
             --btn-bg: rgba(255, 255, 255, 0.15);
             --btn-hover-bg: rgba(255, 255, 255, 0.25);
             --prompt-bg: rgba(255, 255, 255, 0.1);
             --header-shadow: rgba(0, 0, 0, 0.3);
-            --theme-color: #0066cc;
+            --theme-color: #1e3c72;
         }
 
-        body.dark-theme {
-            --bg-gradient-start: #1e2a3a;
-            --bg-gradient-end: #0f1419;
-            --text-color: #e8edf2;
-            --text-muted: rgba(232, 237, 242, 0.92);
-            --text-subtle: rgba(232, 237, 242, 0.78);
-            --text-footer: rgba(232, 237, 242, 0.6);
-            --card-bg: rgba(255, 255, 255, 0.06);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --card-hover-bg: rgba(255, 255, 255, 0.12);
-            --card-shadow: rgba(0, 0, 0, 0.45);
-            --btn-bg: rgba(255, 255, 255, 0.08);
-            --btn-hover-bg: rgba(255, 255, 255, 0.14);
-            --prompt-bg: rgba(255, 255, 255, 0.06);
-            --header-shadow: rgba(0, 0, 0, 0.5);
-            --theme-color: #1a3a5c;
+        /* 🖼️ 自訂背景圖片主題 (custom) */
+        body[data-theme="custom"] {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            --card-bg: rgba(0, 0, 0, 0.45);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --card-hover-bg: rgba(0, 0, 0, 0.55);
+            --card-shadow: rgba(0, 0, 0, 0.35);
+            --text-color: #ffffff;
+            --text-desc: rgba(255, 255, 255, 0.75);
+            --btn-bg: rgba(255, 255, 255, 0.2);
+            --btn-hover-bg: rgba(255, 255, 255, 0.3);
+            --prompt-bg: rgba(0, 0, 0, 0.4);
+            --header-shadow: rgba(0, 0, 0, 0.4);
+            --theme-color: #000000;
         }
 
         * {
@@ -54,7 +86,7 @@
 
         body {
             font-family: 'Microsoft JhengHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background: var(--bg-gradient);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -92,7 +124,7 @@
 
         .header p {
             font-size: 1.1rem;
-            color: var(--text-muted);
+            color: var(--text-desc);
         }
 
         main {
@@ -109,7 +141,7 @@
             font-weight: 600;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: var(--text-subtle);
+            color: var(--text-desc);
             margin-bottom: 14px;
             padding-bottom: 8px;
             border-bottom: 1px solid var(--card-border);
@@ -124,7 +156,7 @@
         .service-note {
             margin-top: 10px;
             font-size: 0.75rem;
-            color: var(--text-subtle);
+            color: var(--text-desc);
             line-height: 1.5;
             opacity: 0.9;
         }
@@ -161,8 +193,36 @@
 
         .service-desc {
             font-size: 0.9rem;
-            color: var(--text-subtle);
+            color: var(--text-desc);
             line-height: 1.4;
+        }
+
+        .theme-select {
+            background: var(--btn-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 25px;
+            padding: 10px 16px;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            min-width: 160px;
+        }
+
+        .theme-select:hover {
+            background: var(--btn-hover-bg);
+        }
+
+        .theme-select:focus {
+            outline: 2px solid var(--card-border);
+            outline-offset: 2px;
+        }
+
+        .theme-select option {
+            color: #0f172a;
+            background: #ffffff;
         }
 
         .quick-actions {
@@ -195,7 +255,7 @@
             margin-top: auto;
             text-align: center;
             font-size: 0.8rem;
-            color: var(--text-footer);
+            color: var(--text-desc);
         }
 
         .install-prompt {
@@ -259,7 +319,7 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
     <div class="container">
         <header class="header">
             <img src="icon.png" alt="中央大學校徽" class="header-logo">
@@ -276,8 +336,15 @@
         <div class="quick-actions">
             <a href="#" class="quick-btn" onclick="openAllServices(); return false;">🚀 一鍵開啟核心三站</a>
             <a href="#" class="quick-btn" onclick="showShortcuts(); return false;">⌨️ 快捷鍵</a>
-            <a href="#" class="quick-btn" id="themeToggleBtn" onclick="toggleTheme(); return false;">🌙 切換主題</a>
+            <select id="themeSelect" class="theme-select" aria-label="切換主題">
+                <option value="dark">🖤 深黑</option>
+                <option value="light">🤍 明亮</option>
+                <option value="blue">💙 中大藍</option>
+                <option value="custom">🖼️ 自訂背景圖</option>
+            </select>
         </div>
+
+        <input type="file" id="bgInput" accept="image/*" style="display:none;">
 
         <main>
             <section class="service-section">
@@ -340,6 +407,16 @@
     </div>
 
     <script>
+        const THEME_STORAGE_KEY = 'ncu-helper-theme';
+        const BG_STORAGE_KEY = 'ncu-custom-bg';
+
+        const THEME_META_COLORS = {
+            dark: '#0f172a',
+            light: '#f1f5f9',
+            blue: '#1e3c72',
+            custom: '#000000'
+        };
+
         const SERVICE_URLS = {
             '1': 'https://portal.ncu.edu.tw',
             '2': 'https://ncueeclass.ncu.edu.tw/dashboard',
@@ -357,7 +434,8 @@
         let deferredPrompt;
         const installPrompt = document.getElementById('installPrompt');
         const installBtn = document.getElementById('installBtn');
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeSelect = document.getElementById('themeSelect');
+        const bgInput = document.getElementById('bgInput');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -431,24 +509,77 @@
             );
         }
 
-        let isDark = false;
-
-        function applyTheme() {
-            document.body.classList.toggle('dark-theme', isDark);
-            document.querySelector('meta[name="theme-color"]').content = isDark ? '#1a3a5c' : '#0066cc';
-            themeToggleBtn.textContent = isDark ? '☀️ 切換主題' : '🌙 切換主題';
+        function applyCustomBackground(base64String) {
+            document.body.style.background = '';
+            document.body.style.backgroundImage = `url(${base64String})`;
         }
 
-        function toggleTheme() {
-            isDark = !isDark;
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            applyTheme();
+        function clearCustomBackground() {
+            document.body.style.backgroundImage = '';
+            document.body.style.background = '';
         }
 
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            isDark = true;
-            applyTheme();
+        function setTheme(themeName) {
+            document.body.setAttribute('data-theme', themeName);
+            localStorage.setItem(THEME_STORAGE_KEY, themeName);
+
+            if (themeName !== 'custom') {
+                clearCustomBackground();
+            } else {
+                const savedBg = localStorage.getItem(BG_STORAGE_KEY);
+                if (savedBg) {
+                    applyCustomBackground(savedBg);
+                } else {
+                    bgInput.value = '';
+                    bgInput.click();
+                }
+            }
+
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+                metaThemeColor.content = THEME_META_COLORS[themeName] || THEME_META_COLORS.dark;
+            }
+
+            if (themeSelect && themeSelect.value !== themeName) {
+                themeSelect.value = themeName;
+            }
+        }
+
+        themeSelect.addEventListener('change', (e) => {
+            setTheme(e.target.value);
+        });
+
+        bgInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                e.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64String = reader.result;
+                localStorage.removeItem(BG_STORAGE_KEY);
+                localStorage.setItem(BG_STORAGE_KEY, base64String);
+                setTheme('custom');
+                applyCustomBackground(base64String);
+                e.target.value = '';
+            };
+            reader.onerror = () => {
+                e.target.value = '';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+            setTheme(savedTheme);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTheme);
+        } else {
+            initTheme();
         }
 
         document.querySelectorAll('.service-card').forEach(card => {
